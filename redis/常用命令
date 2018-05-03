@@ -1,0 +1,4 @@
+批量删除Key
+    redis-cli keys "prefix*" | xargs redis-cli del                              //直接删除
+    redis-cli -a password keys "prefix*" | xargs redis-cli -a password del      //指定密码删除，密码为password
+    redis-cli -n 0 keys "prefix*" | xargs redis-cli -n 0 del                    //指定特定的redis库， 这里表示指定0库
