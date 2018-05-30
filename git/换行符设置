@@ -1,0 +1,21 @@
+core.autocrlf 
+    可选值: true false input
+
+通过git config --list查看所有配置的值，同一配置可能有多个相同的值(global、local repo)，后者覆盖前者。用 git config core.autocrlf 显示其最终有效值。
+
+
+实例: git config --global core.autocrlf false  // --global若省略，则设置只对当前repo有效
+    true: 检出时会将文件的lf转为crlf, 提交时会把文件中的crlf转为lf。。。终于能用记事本正确查看工作区文件内容了~( 还用记事本？ :-D )
+    false: 检出或提交时都不会对文件换行符进行转换，原本是什么就是什么。 
+    input：从工作区放到仓库里(input)时，即提交时会将文件里的crlf转为lf；但检出时，不会进行转换。
+
+何时用false
+    1、是为了编辑时尽量不用\r\n，而是使用各平台统一的\n。
+    2、即使提交后的代码换行符不一致，也可以修改换行符后重新提交。
+    3、当前Visual Studio 2017支持.editorconfig。
+    4、如果提交的代码包含二进制文件，转换可能会导致文件损坏。。。
+
+何时用true，input
+    在Windows下，若将其设置false，这可能会导致仓库内文件的代码换行符混乱不一致。而用true或input能使得仓库里的文件换行符都是lf。
+    不管是true或input都不会影响提交后的仓库代码换行符。这要根据情况来选择。。。有些工程可能最好是input，比如某大的工程里面包含有一些批处理脚本文件，编译时需要自动调用相关工具对脚本进行处理，然而处理这些脚本的工具不能很好地识别crlf，将导致出错。这时就不应该设置core.autocrlf为true了，应该设为input。
+    上面的这个问题延伸开来，如果一些Windows平台下的批处理工具只能很好地识别crlf，不能很好地识别lf，那么我们就不应该设core.autocrlf为true或input了[即便true检出时自动转crlf，但你上传后，(别人core.autocrlf配置不同)再检出后就不一定保证会有正确的crlf了]，而是false。

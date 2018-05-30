@@ -1,0 +1,9 @@
+//通过条件删除数据
+POST twitter/_delete_by_query
+{
+  "query": { 
+    "match": {
+      "message": "some message"
+    }
+  }
+}
